@@ -31,6 +31,7 @@ func reloadConfig(
                 resetHotKeys()
                 config = parsedConfig
                 configUrl = url
+                guard defaultScriptEngine.reload() else { return false }
                 activateMode(activeMode)
                 syncStartAtLogin()
             }
