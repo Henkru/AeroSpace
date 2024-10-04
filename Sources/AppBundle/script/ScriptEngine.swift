@@ -11,6 +11,7 @@ class ScriptEngine {
         aero["api"] = createApi().asLuaValue
         aero["keymap"] = createKeymapApi().asLuaValue
         aero["callbacks"] = createCallbacksApi().asLuaValue
+        aero["config"] = createConfigApi().asLuaValue
         ctx.setGlobal(key: "aero", value: aero)
     }
 
