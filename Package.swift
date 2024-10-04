@@ -22,6 +22,7 @@ let package = Package(
         .package(url: "https://github.com/LebJe/TOMLKit", exact: "0.5.5"),
         .package(url: "https://github.com/apple/swift-collections", exact: "1.1.0"),
         .package(url: "https://github.com/antlr/antlr4", exact: "4.13.1"),
+        .package(url: "https://github.com/Henkru/CLua", exact: "5.1.5"),
     ],
     // Targets are the basic building blocks of a package, defining a module or a test suite.
     // Targets can depend on other targets in this package and products from dependencies.
@@ -55,6 +56,7 @@ let package = Package(
                 .product(name: "HotKey", package: "HotKey"),
                 .product(name: "TOMLKit", package: "TOMLKit"),
                 .product(name: "Collections", package: "swift-collections"),
+                .product(name: "CLua", package: "CLua"),
             ]
         ),
         .executableTarget(

@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "clua",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Henkru/CLua",
+      "state" : {
+        "revision" : "1960ed3a59c7dbc85b4e6b2862c13146537b4691",
+        "version" : "5.1.5"
+      }
+    },
+    {
       "identity" : "hotkey",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/soffes/HotKey",
