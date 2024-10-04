@@ -8,6 +8,7 @@ class ScriptEngine {
 
     init() {
         let aero = LuaTable.empty(ctx: ctx)
+        aero["api"] = createApi().asLuaValue
         ctx.setGlobal(key: "aero", value: aero)
     }
 

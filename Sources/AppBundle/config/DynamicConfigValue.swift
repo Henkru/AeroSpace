@@ -9,6 +9,7 @@ struct PerMonitorValue<Value: Equatable>: Equatable {
 enum DynamicConfigValue<Value: Equatable>: Equatable {
     case constant(Value)
     case perMonitor([PerMonitorValue<Value>], default: Value)
+    case dynamic(LuaFunction, LuaValue)
 }
 
 extension DynamicConfigValue {
@@ -26,6 +27,44 @@ extension DynamicConfigValue {
                             : nil
                     }
                     .first ?? defaultValue
+            case .dynamic(let function, let id):
+                let monitorInfo = LuaTable.empty(ctx: function.ctx)
+                monitorInfo["id"] = LuaValue.fromInt(monitor.monitorId)
+                monitorInfo["name"] = LuaValue.fromString(monitor.name)
+                monitorInfo["width"] = .number(monitor.width)
+                monitorInfo["height"] = .number(monitor.height)
+                monitorInfo["activeWorkspace"] = LuaValue.fromString(monitor.activeWorkspace.id)
+
+                switch function.call(args: [id, .table(monitorInfo)]) {
+                    case .none:
+                        error("Lua callback did not return a value")
+                    case .single(let result):
+                        guard let value = castLuaValue(result) else {
+                            error("Could not cast the return value of Lua callback to dynamic config value")
+                        }
+                        return value
+                    case .many(let result):
+                        guard let value = result.first,
+                              let value = castLuaValue(value)
+                        else {
+                            error("Could not cast the return value of Lua callback to dynamic config value")
+                        }
+                        return value
+                    case .err(let err):
+                        error("Failed to call the Lua callback for dynamic config value: \(err.message)")
+                }
+        }
+    }
+
+    private func castLuaValue(_ luaValue: LuaValue) -> Value? {
+        if Value.self == String.self, let value = luaValue.asString() as? Value {
+            return value
+        } else if Value.self == Int.self, let value = luaValue.asInteger() as? Value {
+            return value
+        } else if Value.self == Bool.self, let value = luaValue.asBool() as? Value {
+            return value
+        } else {
+            return nil
         }
     }
 }
