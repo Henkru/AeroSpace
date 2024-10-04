@@ -9,6 +9,7 @@ class ScriptEngine {
     init() {
         let aero = LuaTable.empty(ctx: ctx)
         aero["api"] = createApi().asLuaValue
+        aero["callbacks"] = createCallbacksApi().asLuaValue
         ctx.setGlobal(key: "aero", value: aero)
     }
 
